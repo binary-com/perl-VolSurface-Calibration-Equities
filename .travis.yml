@@ -13,6 +13,8 @@ before_install:
     - "cpanm Test::FailWarnings"
     - "cpanm Test::Most"
     - "cpanm Devel::Cover::Report::Coveralls"
+    - "cpanm Test::Perl::Critic"
+    - "cpanm Perl::Tidy"
     - "cpanm --installdeps ."
 script:
   perl Makefile.PL && make test && cover -test -report coveralls
