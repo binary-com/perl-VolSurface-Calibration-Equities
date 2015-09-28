@@ -8,6 +8,7 @@ services:
     - redis-server
 before_install:
     - "cpanm JSON"
+    - "cpanm Date::Utility"
     - "cpanm Test::FailWarnings"
     - "cpanm Test::Most"
     - "cpanm Devel::Cover::Report::Coveralls"
