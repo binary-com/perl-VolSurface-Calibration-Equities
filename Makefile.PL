@@ -7,7 +7,7 @@ WriteMakefile(
     NAME             => 'VolSurface::Calibration::SABR',
     AUTHOR           => q{Binary.com <support@binary.com>},
     VERSION_FROM     => 'lib/VolSurface/Calibration/SABR.pm',
-    ABSTRACT_FROM    => 'lib/VolSurface/Calibration/SABR.pm',
+    ABSTRACT         => 'lib/VolSurface/Calibration/SABR.pm',
     LICENSE          => 'artistic_2',
     PL_FILES         => {},
     MIN_PERL_VERSION => 5.006,

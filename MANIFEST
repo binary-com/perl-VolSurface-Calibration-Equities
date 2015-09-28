@@ -1,3 +1,4 @@
+.travis.yml
 Changes
 ignore.txt
 lib/VolSurface/Calibration/SABR.pm
@@ -8,6 +9,9 @@ README
 README.md
 t/00-load.t
 t/manifest.t
+t/perlcritic.t
 t/pod-coverage.t
 t/pod.t
+t/rc/.perlcriticrc
+t/rc/.perltidyrc
 t/sabr.t

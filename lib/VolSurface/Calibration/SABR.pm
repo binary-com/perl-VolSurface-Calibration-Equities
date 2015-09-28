@@ -2,7 +2,7 @@ package VolSurface::Calibration::SABR;
 
 =head1 NAME
 
-BOM::MarketData::VolSurface::Calibration::SABR
+VolSurface::Calibration::SABR
 
 =head1 DESCRIPTION
 
@@ -21,6 +21,9 @@ use Math::Trig qw(tanh);
 use Try::Tiny;
 use Format::Util::Numbers qw(roundnear);
 use DataDog::DogStatsd::Helper qw(stats_gauge);
+
+our $VERSION = '0.01';
+
 has _max_iteration => (
     is      => 'ro',
     isa     => 'Int',
