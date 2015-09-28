@@ -20,7 +20,7 @@ use List::Util qw(min max);
 use Math::Trig qw(tanh);
 use Try::Tiny;
 use Format::Util::Numbers qw(roundnear);
-use DataDog::DogStatsd::Helper qw(stats_gauge);
+#use DataDog::DogStatsd::Helper qw(stats_gauge);
 
 our $VERSION = '0.01';
 
@@ -209,7 +209,7 @@ sub compute_parameterization {
     }
 
     if ($self->price_with_parameterized_surface) {
-        stats_gauge('index_vol_calibration_error ', $new_values->{calibration_error}, {tags => ['tag:' . $self->symbol]});
+        #stats_gauge('index_vol_calibration_error ', $new_values->{calibration_error}, {tags => ['tag:' . $self->symbol]});
     }
     # we expect the params to be passed in the correct order
     my %calib_params =
