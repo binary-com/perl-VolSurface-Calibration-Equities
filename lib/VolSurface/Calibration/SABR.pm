@@ -30,20 +30,8 @@ use Try::Tiny;
 use Format::Util::Numbers qw(roundnear);
 
 has surface => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'HashRef',
-    required => 1,
-);
-
-=head2 symbol
-
-The symbol of the underlying that this surface is for.
-
-=cut
-
-has symbol => (
-    is       => 'rw',
-    isa      => 'Str',
     required => 1,
 );
 
@@ -54,9 +42,8 @@ Get all the terms in a surface in ascending order.
 =cut
 
 has term_by_day => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'ArrayRef',
-    init_arg => undef,
     required => 1,
 );
 
@@ -69,7 +56,6 @@ The parameterized (and, thus, smoothed) version of this surface.
 has parameterization => (
     is       => 'rw',
     isa      => 'Maybe[HashRef]',
-    required => 1,
 );
 
 =head2 smile_points
@@ -81,7 +67,7 @@ It can be delta points, moneyness points or any other points that we might have 
 =cut
 
 has smile_points => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'ArrayRef',
     required => 1,
 );
@@ -105,7 +91,9 @@ has _scale => (
 );
 
 =head2 function_to_optimize
+
 The function that we want to optimize.
+
 =cut
 
 sub function_to_optimize {
@@ -113,10 +101,6 @@ sub function_to_optimize {
 
     # this number is returned when the optimization is heading the wrong path
     my $error = 1000;
-
-    if (not $params) {
-        $self->_logger->logcroak('initial params are not present during optimization');
-    }
 
     my %params =
         pairwise { our $a => our $b } @{$self->calibration_param_names},
@@ -168,8 +152,10 @@ sub function_to_optimize {
 }
 
 =head2 calibration_param_names
+
 Calibration parameter names.
 It is hard-coded here because it needs to be in this sequence
+
 =cut
 
 has calibration_param_names => (
@@ -195,7 +181,9 @@ has calibration_param_names => (
 );
 
 =head2 default_initial_guess
+
 Initial guess for parameters. We need to start with something.
+
 =cut
 
 has default_initial_guess => (
@@ -221,6 +209,7 @@ has default_initial_guess => (
 );
 
 =head2 strike_ratio
+
 =cut
 
 has strike_ratio => (
@@ -246,10 +235,8 @@ has strike_ratio => (
 
 =cut
 
-sub acompute_parameterization {
+sub compute_parameterization {
     my $self = shift;
-
-    $self->_logger->debug('Starting calibration for [' . $self->symbol . ']');
 
     my $opt_using_params_from_cache;
     if ($self->parameterization) {
@@ -270,9 +257,6 @@ sub acompute_parameterization {
         $new_values = $opt_using_initial_params;
     }
 
-    if ($self->price_with_parameterized_surface) {
-        stats_gauge('index_vol_calibration_error ', $new_values->{calibration_error}, {tags => ['tag:' . $self->symbol]});
-    }
     # we expect the params to be passed in the correct order
     my %calib_params =
         pairwise { $a => $b } @{$self->calibration_param_names},
@@ -587,6 +571,7 @@ sub _calculate_simplex_centroid {
 Binary.com, C<< <support at binary.com> >>
 
 =head1 BUGS
+
 Please report any bugs or feature requests to C<bug-volsurface-calibration-sabr at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=VolSurface-Calibration-SABR>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
