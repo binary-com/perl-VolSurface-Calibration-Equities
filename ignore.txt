@@ -14,5 +14,5 @@ inc/
 nytprof.out
 pod2htm*.tmp
 pm_to_blib
-VolSurface-Calibration-SABR-*
-VolSurface-Calibration-SABR-*.tar.gz
+VolSurface-Calibration-Equities-*
+VolSurface-Calibration-Equities-*.tar.gz

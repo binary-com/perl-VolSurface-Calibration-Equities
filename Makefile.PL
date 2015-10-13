@@ -4,10 +4,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME             => 'VolSurface::Calibration::SABR',
+    NAME             => 'VolSurface::Calibration::Equities',
     AUTHOR           => q{Binary.com <support@binary.com>},
-    VERSION_FROM     => 'lib/VolSurface/Calibration/SABR.pm',
-    ABSTRACT         => 'lib/VolSurface/Calibration/SABR.pm',
+    VERSION_FROM     => 'lib/VolSurface/Calibration/Equities.pm',
+    ABSTRACT         => 'lib/VolSurface/Calibration/Equities.pm',
     LICENSE          => 'artistic_2',
     PL_FILES         => {},
     MIN_PERL_VERSION => 5.006,
@@ -22,5 +22,5 @@ WriteMakefile(
         #'Foo::Bar::Module' => 5.0401,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean => { FILES => 'VolSurface-Calibration-SABR-*' },
+    clean => { FILES => 'VolSurface-Calibration-Equities-*' },
 );

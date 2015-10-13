@@ -1,4 +1,4 @@
-### VolSurface::Calibration::SABR
+### VolSurface::Calibration::Equities
 
 This repository is Binary.com's equities volatility calibration - a variant of standard SABR model. This assumes that the input volatility surface is in moneyness terms, with a matrix of moneyness and tenor defined. 
 
@@ -17,6 +17,6 @@ For optimization, we use a form of the Downhill Simplex Method or Nelder-Mead (a
 
 Further details of the calibration model is available in MS Word and pdf formats at :
 
-https://github.com/mm-binary/perl-VolSurface-Calibration-SABR/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.docx
+https://github.com/mm-binary/perl-VolSurface-Calibration-Equities/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.docx
 
-https://github.com/mm-binary/perl-VolSurface-Calibration-SABR/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.pdf
+https://github.com/mm-binary/perl-VolSurface-Calibration-Equities/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.pdf

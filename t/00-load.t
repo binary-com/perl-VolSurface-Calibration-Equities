@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok( 'VolSurface::Calibration::SABR' ) || print "Bail out!\n";
+    use_ok( 'VolSurface::Calibration::Equities' ) || print "Bail out!\n";
 }
 
-diag( "Testing VolSurface::Calibration::SABR $VolSurface::Calibration::SABR::VERSION, Perl $], $^X" );
+diag( "Testing VolSurface::Calibration::Equities $VolSurface::Calibration::Equities::VERSION, Perl $], $^X" );

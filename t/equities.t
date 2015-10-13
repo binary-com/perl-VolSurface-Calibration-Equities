@@ -5,9 +5,9 @@ use Test::Exception;
 use Test::More tests => 16;
 use Test::NoWarnings;
 use Test::Warn;
-use VolSurface::Calibration::SABR;
+use VolSurface::Calibration::Equities;
 
-my $sabr = VolSurface::Calibration::SABR->new(
+my $sabr = VolSurface::Calibration::Equities->new(
     surface => {
         "7" => { smile => {
                 "80" =>  0.4687,
@@ -231,4 +231,4 @@ is($p14n->{values}->{atmWingR}, 19.9995540633721);
 is($p14n->{values}->{skew1year}, -0.225674773248133);
 is($p14n->{values}->{kurtosisgrowth}, 4.98176449317822);
 
-dies_ok { VolSurface::Calibration::SABR->new(); } "Checking for required parameters";
+dies_ok { VolSurface::Calibration::Equities->new(); } "Checking for required parameters";
