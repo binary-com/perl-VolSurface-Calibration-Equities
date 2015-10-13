@@ -54,8 +54,8 @@ The parameterized (and, thus, smoothed) version of this surface.
 =cut
 
 has parameterization => (
-    is       => 'rw',
-    isa      => 'Maybe[HashRef]',
+    is  => 'rw',
+    isa => 'Maybe[HashRef]',
 );
 
 =head2 smile_points
