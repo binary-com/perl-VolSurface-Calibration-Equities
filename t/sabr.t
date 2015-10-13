@@ -2,8 +2,9 @@ use strict;
 use warnings;
 
 use Test::Exception;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::NoWarnings;
+use Test::Warn;
 use VolSurface::Calibration::SABR;
 
 my $sabr = VolSurface::Calibration::SABR->new(
@@ -232,9 +233,9 @@ is($p14n->{values}->{kurtosisgrowth}, 4.98176449317822);
 
 dies_ok { VolSurface::Calibration::SABR->new(); } "Checking for required parameters";
 
-dies_ok { 
+warnings_exist { 
     VolSurface::Calibration::SABR->new(
         surface => {}, 
         term_by_day => [7, 31, 61, 94, 185, 276, 367],
         smile_points => [80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 110, 112, 114, 116, 118, 120],
-    ); } "Surface is required for calibration";
+    ); } [qr/division by zero/], "Surface is required for calibration";

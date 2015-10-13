@@ -1,5 +1,7 @@
 .travis.yml
 Changes
+doc/SABR.pdf
+doc/SABR.tex
 ignore.txt
 lib/VolSurface/Calibration/SABR.pm
 LICENSE
@@ -15,3 +17,4 @@ t/pod.t
 t/rc/.perlcriticrc
 t/rc/.perltidyrc
 t/sabr.t
+t/test_sabr.pl
