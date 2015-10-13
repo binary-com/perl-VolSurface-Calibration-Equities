@@ -1,2 +1,2 @@
-# perl-VolSurface-Calibration-SABR
-SABR volatility surface calibration
+# perl-VolSurface-Calibration-Equities
+
