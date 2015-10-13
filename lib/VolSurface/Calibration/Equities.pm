@@ -1,4 +1,4 @@
-package VolSurface::Calibration::SABR;
+package VolSurface::Calibration::Equities;
 
 use strict;
 use warnings;
@@ -7,11 +7,11 @@ our $VERSION = '0.01';
 
 =head1 NAME
 
-VolSurface::Calibration::SABR
+VolSurface::Calibration::Equities
 
 =head1 DESCRIPTION
 
-SABR is a calibration model that is used in volatility surface calibration. This model checks whether a given volatility surface 
+This is a calibration model that is used in volatility surface calibration. This model checks whether a given volatility surface 
 conforms to some specific mathematical equations describing a volatility smile. If not, it will update the surface to fix it.
 
 =head1 VERSION
@@ -572,28 +572,28 @@ Binary.com, C<< <support at binary.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-volsurface-calibration-sabr at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=VolSurface-Calibration-SABR>.  I will be notified, and then you'll
+Please report any bugs or feature requests to C<bug-volsurface-calibration-equities at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=VolSurface-Calibration-Equities>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
-    perldoc VolSurface::Calibration::SABR
+    perldoc VolSurface::Calibration::Equities
     You can also look for information at:
 
 =over 4
 
 =item * RT: CPAN's request tracker (report bugs here)
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=VolSurface-Calibration-SABR>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=VolSurface-Calibration-Equities>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/VolSurface-Calibration-SABR>
+L<http://annocpan.org/dist/VolSurface-Calibration-Equities>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/VolSurface-Calibration-SABR>
+L<http://cpanratings.perl.org/d/VolSurface-Calibration-Equities>
 
 =item * Search CPAN
 
