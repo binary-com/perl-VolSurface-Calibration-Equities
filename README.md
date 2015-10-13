@@ -1,6 +1,6 @@
 ### VolSurface::Calibration::SABR
 
-This repository is the Binary.com's equities volatility calibration - a variant of standard SABR model. Basically a Volatility Surface Calibration algorithm tries to check a Vol-Surface to make sure it satisfies some basic requirements. If not, it will change the surface to make it a valid VolSurface. The standard SABR (stochastic alpha, beta, rho_ model is used to estimate implied volatility of an instrument in the derivatives market. 
+This repository is Binary.com's equities volatility calibration - a variant of standard SABR model. Basically a Volatility Surface Calibration algorithm tries to check a Vol-Surface to make sure it satisfies some basic requirements. If not, it will change the surface to make it a valid VolSurface. The standard SABR (stochastic alpha, beta, rho) model is used to estimate implied volatility of an instrument in the derivatives market. 
 
 ```
 
@@ -8,7 +8,9 @@ This repository is the Binary.com's equities volatility calibration - a variant 
 
 ```
 
-The term is basically expressing implied volatility as some sort of moneyness function (the alpha x log(F/K)D(...) part). This term is adjusted by some factor in the square brackets and then added back. In our variant of the standard SABR approach, we modify the terms in the square brackets. This calibration approach is based upon modeling the term structure of ATM volatiity and Skew using exponential functions, as it is widely observed that ATM vols term structure or skew term structure is mostly convex.
+The equation is basically expressing implied volatility as some sort of moneyness function (the alpha x log(F/K)D(...) part). This term is adjusted by a factor in the square brackets and then added back. In our variant of the standard SABR approach, we modify the terms in the square brackets. This calibration approach is based upon modeling the term structure of ATM volatiity and Skew using exponential functions, as it is widely observed that ATM vols term structure or skew term structure is mostly convex.
+
+For optimization, we use a form of the Downhill Simplex Method or Nelder-Mead (available as the R function optim). 
 
 #### Documentation
 
@@ -17,6 +19,3 @@ Further details of the calibration model is available in MS Word and pdf formats
 https://github.com/mm-binary/perl-VolSurface-Calibration-SABR/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.docx
 
 https://github.com/mm-binary/perl-VolSurface-Calibration-SABR/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.pdf
-
-
-To read more about how this algorithm works please refer to "SABR\_RMG\_Implementation.pdf" file in the "/doc" directory.
