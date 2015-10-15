@@ -7,6 +7,11 @@ perl:
 before_install:
     - "cpanm --installdeps ."
     - "cpanm Date::Utility" 
+    - "cpanm Format::Util::Numbers"
+    - "cpanm Try::Tiny"
+    - "cpanm Math::Trig"
+    - "cpanm List::Util"
+    - "cpanm List::MoreUtils"
     - "cpanm Devel::Cover::Report::Coveralls"
 script:
   perl Makefile.PL && make test && cover -test -report coveralls
