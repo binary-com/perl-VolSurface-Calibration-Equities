@@ -6,6 +6,7 @@ perl:
     - "5.14"
 before_install:
     - "cpanm --installdeps ."
+    - "cpanm Date::Utility" 
     - "cpanm Devel::Cover::Report::Coveralls"
 script:
   perl Makefile.PL && make test && cover -test -report coveralls
