@@ -340,6 +340,7 @@ sub _get_params_from {
     return \@guess;
 }
 
+
 =head2 _calculate_skew
 
 The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions. 
@@ -576,6 +577,7 @@ sub _calculate_simplex_centroid {
 }
 
 1;
+
 
 =head1 AUTHOR
 
