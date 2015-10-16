@@ -136,9 +136,9 @@ sub function_to_optimize {
     foreach my $param_name (@calibration_param_names) {
         my $param_value = $params{$param_name};
         return $error
-            if ($param_name =~ /wing(R|L)/i && max(abs($param_value)) > 20.0);
+            if ($param_name =~ /wing(R|L)/i && abs($param_value) > 20.0);
         return $error
-            if ($param_name =~ /growth/i && max(abs($param_value)) > 5.0);
+            if ($param_name =~ /growth/i && abs($param_value) > 5.0);
         return $error
             if ($param_name !~ /wing(R|L)/i
             && $param_name !~ /growth/i
