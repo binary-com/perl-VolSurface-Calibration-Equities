@@ -11,8 +11,10 @@ VolSurface::Calibration::Equities
 
 =head1 DESCRIPTION
 
-This is a calibration model that is used in volatility surface calibration. This model checks whether a given volatility surface 
-conforms to some specific mathematical equations describing a volatility smile. If not, it will update the surface to fix it.
+This module implements Binary.com's volatility surface calibration algorithm which is based on SABR.
+The SABR (Stochastic alpha, beta, rho) model is a stochastic volatility model, which is used to 
+estimate the volatility smile in the derivatives market. For a more general overview of the general 
+SABR model, please refer https://en.wikipedia.org/wiki/SABR_volatility_model.
 
 =head1 VERSION
 
@@ -32,7 +34,7 @@ use Format::Util::Numbers qw(roundnear);
 =head2 calibration_param_names
 
 Calibration parameter names.
-It is hard-coded here because it needs to be in this sequence
+It is hard-coded here because it needs to be in this sequence.
 
 =cut
 
@@ -200,6 +202,8 @@ has default_initial_guess => (
 
 =head2 strike_ratio
 
+Bounds for moneyness (strike ratio of 1 is equivalent to 100% moneyness).
+
 =cut
 
 has strike_ratio => (
@@ -321,7 +325,12 @@ sub _calculate_calibrated_vol {
     return $atm_vol * $z / $d;
 }
 
-#calculation metohds which mostly do "mathematical" jobs
+=head2 _get_params_from
+
+calculation metohds which mostly do "mathematical" jobs.
+
+=cut
+
 sub _get_params_from {
     my ($self, $param_hash) = @_;
 
@@ -330,6 +339,13 @@ sub _get_params_from {
 
     return \@guess;
 }
+
+
+=head2 _calculate_skew
+
+The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions. 
+
+=cut
 
 sub _calculate_skew {
     my ($self, $tiy, $params) = @_;
@@ -351,6 +367,14 @@ sub _calculate_skew {
 
     return $skew;
 }
+
+=head2 _calculate_kurtosis
+
+kurtosis can be manipulated using a simple growth rate function. 
+Kurtosis provides a symmetric control over the wings of a 
+surface. Kurtosis basically shifts the wings of the curve in a symetric way. 
+
+=cut
 
 sub _calculate_kurtosis {
     my ($self, $tiy, $params) = @_;
@@ -383,9 +407,15 @@ sub _calculate_variance {
     return $atm_vol;
 }
 
-#Algorithm change - now based on centroid calculations
-#A function that optimizes a set of parameters against a function.
-#This optimization method is based on Amoeba optimization
+=head2 _optimize
+
+Algorithm change - now based on centroid calculations
+A function that optimizes a set of parameters against a function.
+This optimization method is based on Amoeba optimization. We use a form of the 
+Downhill Simplex Method or Nelder-Mead (available as the R function optim). 
+This can also be coded in other languages. 
+
+=cut
 
 sub _optimize {
     my ($self, $params) = @_;
@@ -548,7 +578,6 @@ sub _calculate_simplex_centroid {
 
 1;
 
-=head1 DEPENDENCIES
 
 =head1 AUTHOR
 
