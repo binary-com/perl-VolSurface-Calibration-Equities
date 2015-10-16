@@ -215,14 +215,14 @@ my $sabr = VolSurface::Calibration::Equities->new(
 #p14n is for parameterization
 my $p14n = $sabr->compute_parameterization;
 
-is($p14n->{calibration_error}, 5.30443153953117);
+is($p14n->{calibration_error}, 5.30443153953118);
 
 is($p14n->{values}->{skewwingR}, 1.88107143471881);
 is($p14n->{values}->{atmvol1year}, 0.219751912673385);
 is($p14n->{values}->{kurtosisshort}, 0.149061064029684);
 is($p14n->{values}->{atmvolshort}, 0.18766331944103);
 is($p14n->{values}->{kurtosislong}, 0.0519890233725906);
-is($p14n->{values}->{skewlong}, -0.233719000522156);
+is($p14n->{values}->{skewlong}, -0.233719000522154);
 is($p14n->{values}->{skewwingL}, 19.9889221540814);
 is($p14n->{values}->{skewshort}, -0.111623735564867);
 is($p14n->{values}->{atmvolLong}, 0.21678145623794);

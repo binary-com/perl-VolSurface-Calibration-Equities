@@ -498,8 +498,7 @@ sub _optimize {
                 for ($i = 0; $i <= $num_of_points; $i++) {
                     if ($i != $lowest_point_index) {
                         @{$simplex[$i]} =
-                            map { $simplex[$lowest_point_index][$_] + ($simplex[$i][$_] - $simplex[$lowest_point_index][$_]) / 2.0 }
-                            (0 .. $num_of_var - 1);
+                            map { ($simplex[$lowest_point_index][$_] + $simplex[$i][$_]) / 2.0 } (0 .. $num_of_var - 1);
                     }
                     $function_eval[$highest_point_index] = $self->function_to_optimize($simplex[$highest_point_index]);
                 }
