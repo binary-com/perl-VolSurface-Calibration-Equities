@@ -23,11 +23,33 @@ Version 0.01
 use Moose;
 
 use Date::Utility;
-use List::MoreUtils qw(pairwise first_index indexes);
+use List::MoreUtils qw(first_index);
 use List::Util qw(min max);
 use Math::Trig qw(tanh);
 use Try::Tiny;
 use Format::Util::Numbers qw(roundnear);
+
+=head2 calibration_param_names
+
+Calibration parameter names.
+It is hard-coded here because it needs to be in this sequence
+
+=cut
+
+my @calibration_param_names = qw/
+    atmvolshort
+    atmvol1year
+    atmvolLong
+    atmWingL
+    atmWingR
+    skewshort
+    skew1year
+    skewlong
+    skewwingL
+    skewwingR
+    kurtosisshort
+    kurtosislong
+    kurtosisgrowth/;
 
 has surface => (
     is       => 'ro',
@@ -102,18 +124,14 @@ sub function_to_optimize {
     # this number is returned when the optimization is heading the wrong path
     my $error = 1000;
 
-    my %params =
-        pairwise { our $a => our $b } @{$self->calibration_param_names},
-        @$params;
+    my %params;
+    @params{@calibration_param_names} = @$params;
 
     my @tenors = @{$self->term_by_day};
-    my @kurtosis =
-        map { $self->_calculate_kurtosis($_ / 365, \%params) } @tenors;
     my @variance =
         map { $self->_calculate_variance($_ / 365, \%params) } @tenors;
-    my @skew = map { $self->_calculate_skew($_ / 365, \%params) } @tenors;
 
-    foreach my $param_name (keys %params) {
+    foreach my $param_name (@calibration_param_names) {
         my $param_value = $params{$param_name};
         return $error
             if ($param_name =~ /wing(R|L)/i && max(abs($param_value)) > 20.0);
@@ -122,10 +140,11 @@ sub function_to_optimize {
         return $error
             if ($param_name !~ /wing(R|L)/i
             && $param_name !~ /growth/i
-            && max(abs($param_value)) > 2.0);
+            && abs($param_value) > 2.0);
     }
 
     return $error if (min(@variance) < 0);
+
     my @atmvols            = map { sqrt($_) } @variance;
     my $calibrated_surface = $self->get_calibrated_surface(\%params);
     my $actual_surface     = $self->surface;
@@ -150,35 +169,6 @@ sub function_to_optimize {
 
     return $total;
 }
-
-=head2 calibration_param_names
-
-Calibration parameter names.
-It is hard-coded here because it needs to be in this sequence
-
-=cut
-
-has calibration_param_names => (
-    is      => 'ro',
-    isa     => 'ArrayRef',
-    default => sub {
-        [qw(
-                atmvolshort
-                atmvol1year
-                atmvolLong
-                atmWingL
-                atmWingR
-                skewshort
-                skew1year
-                skewlong
-                skewwingL
-                skewwingR
-                kurtosisshort
-                kurtosislong
-                kurtosisgrowth
-                )];
-    },
-);
 
 =head2 default_initial_guess
 
@@ -225,13 +215,13 @@ has strike_ratio => (
 
 =head2 compute_parameterization
 
-    Returns a hash reference with new parameterization and calibration_error.
-    These new parameters are calculated using the current parameterization values saved in cache if present,
-    else it would use default parameterization.
+Returns a hash reference with new parameterization and calibration_error.
+These new parameters are calculated using the current parameterization values saved in cache if present,
+else it would use default parameterization.
 
-    my $new_values = $self->compute_parameterization;
-    my $new_params = $new_values->{values};
-    my $new_calibration_error = $new_values->{calibration_error};
+my $new_values = $self->compute_parameterization;
+my $new_params = $new_values->{values};
+my $new_calibration_error = $new_values->{calibration_error};
 
 =cut
 
@@ -258,9 +248,8 @@ sub compute_parameterization {
     }
 
     # we expect the params to be passed in the correct order
-    my %calib_params =
-        pairwise { $a => $b } @{$self->calibration_param_names},
-        @{$new_values->{params}};
+    my %calib_params;
+    @calib_params{@calibration_param_names} = @{$new_values->{params}};
     my %computed_params = (
         values            => \%calib_params,
         calibration_error => $new_values->{calibration_error},
@@ -272,8 +261,8 @@ sub compute_parameterization {
 
 =head2 get_calibrated_surface
 
-    # compute the calibrated surface with the parameters being passed.
-    my $calibrated = $calibrator->get_calibrated_surface($parameters);
+compute the calibrated surface with the parameters being passed.
+my $calibrated = $calibrator->get_calibrated_surface($parameters);
 
 =cut
 
@@ -319,20 +308,17 @@ sub _calculate_calibrated_vol {
     my $x_min = log($self->strike_ratio->{lower}) / $atm_vol / sqrt($tiy);
     my $x_max = log($self->strike_ratio->{higher}) / $atm_vol / sqrt($tiy);
 
-    my $vol;
-    if (abs($x) < 0.00000001) {
-        $vol = $atm_vol;
-    } else {
-        $x =
-            ($x > 0)
-            ? $x_max * tanh($x / $x_max)
-            : $x_min * tanh($x / $x_min);
-        my $z = (-1 * $volofvol * $x);
-        return $atm_vol if (abs($z) < 0.00000001);
-        my $d = log((sqrt(1 - 2 * $corr * $z + $z**2) - $corr + $z) / (1 - $corr));
-        $vol = $atm_vol * $z / $d;
-    }
-    return $vol;
+    return $atm_vol if abs($x) < 0.00000001;
+
+    $x =
+        ($x > 0)
+        ? $x_max * tanh($x / $x_max)
+        : $x_min * tanh($x / $x_min);
+    my $z = (-1 * $volofvol * $x);
+    return $atm_vol if abs($z) < 0.00000001;
+
+    my $d = log((sqrt(1 - 2 * $corr * $z + $z**2) - $corr + $z) / (1 - $corr));
+    return $atm_vol * $z / $d;
 }
 
 #calculation metohds which mostly do "mathematical" jobs
@@ -340,7 +326,7 @@ sub _get_params_from {
     my ($self, $param_hash) = @_;
 
     my @guess =
-        map { roundnear(0.0001, $param_hash->{$_}) } @{$self->calibration_param_names};
+        map { roundnear(0.0001, $param_hash->{$_}) } @calibration_param_names;
 
     return \@guess;
 }
@@ -397,9 +383,9 @@ sub _calculate_variance {
     return $atm_vol;
 }
 
-# Algorithm change - now based on centroid calculations
-# A function that optimizes a set of parameters against a function.
-# This optimization method is based on Amoeba optimization
+#Algorithm change - now based on centroid calculations
+#A function that optimizes a set of parameters against a function.
+#This optimization method is based on Amoeba optimization
 
 sub _optimize {
     my ($self, $params) = @_;
@@ -425,9 +411,8 @@ sub _optimize {
             if (0.1 * abs($params->[$i]) > $step);
     }
 
-    for (my $i = 1; $i <= $num_of_points; $i++) {
-        my @new = map { ($i - 1 == $_) ? $simplex[0][$_] + $step : 0 + $simplex[0][$_] } (0 .. $num_of_var - 1);
-        push @simplex, \@new;
+    for (my $i = 0; $i < $num_of_points; $i++) {
+        push @simplex, [map { $simplex[0][$_] + ($i == $_ ? $step : 0) } (0 .. $num_of_var - 1)];
     }
 
     my @function_eval = map { $self->function_to_optimize($_) } @simplex;
@@ -450,18 +435,14 @@ sub _optimize {
             $calcvert = 0;
             for ($j = 0; $j <= $num_of_points; $j++) {
                 if ($j != $lowest_point_index) {
-                    for ($i = 0; $i < $num_of_points; $i++) {
-                        $current_reflection[$i] = $simplex[$j][$i];
-                    }
-                    $function_eval[$j] = $self->function_to_optimize(\@current_reflection);
+                    $function_eval[$j] = $self->function_to_optimize($simplex[$j]);
                 }
             }
-
         }
+
         my @sorted_eval = sort { $a <=> $b } @function_eval;
         $lowest_point_index = first_index { $_ == $sorted_eval[0] } @function_eval;
         my $highest_point_index = first_index { $_ == $sorted_eval[-1] } @function_eval;
-        my @indexes = indexes { $_ == $sorted_eval[-2] } @function_eval;
 
         my @simplex_centroid = _calculate_simplex_centroid(\@simplex, $num_of_points, $num_of_var, $highest_point_index);
 
@@ -476,29 +457,25 @@ sub _optimize {
 
         #imple reflection of the highest point
         @current_reflection =
-            map { $simplex_centroid[$_] + 1 * ($simplex_centroid[$_] - $simplex[$highest_point_index][$_]) } (0 .. $num_of_var - 1);
+            map { 2 * $simplex_centroid[$_] - $simplex[$highest_point_index][$_] } (0 .. $num_of_var - 1);
         my $reflected_function_eval = $self->function_to_optimize(\@current_reflection);
         if ($reflected_function_eval < $function_eval[$lowest_point_index]) {
 
-#Do simple expansion or in other words look up a little further in this direction
-            @current_expansion = map { $simplex_centroid[$_] + 2 * ($current_reflection[$_] - $simplex_centroid[$_]) } (0 .. $num_of_var - 1);
+            #Do simple expansion or in other words look up a little further in this direction
+            @current_expansion = map { 2 * $current_reflection[$_] - $simplex_centroid[$_] } (0 .. $num_of_var - 1);
 
-            @simplex_centroid =
-                map { $current_reflection[$_] } (0 .. $num_of_var - 1);
             $expansion_function_eval = $self->function_to_optimize(\@current_expansion);
             if ($expansion_function_eval < $reflected_function_eval) {
 
                 #replace highest point with expansion point
                 #assing function value to highest point
-                @{$simplex[$highest_point_index]} =
-                    map { $current_expansion[$_] } (0 .. $num_of_var - 1);
+                @{$simplex[$highest_point_index]} = @current_expansion;
                 $function_eval[$highest_point_index] = $expansion_function_eval;
             } else {
 
                 #replace highest point with reflected point
                 #assign highest value to reflection point
-                @{$simplex[$highest_point_index]} =
-                    map { $simplex_centroid[$_] } (0 .. $num_of_var - 1);
+                @{$simplex[$highest_point_index]} = @current_reflection;
                 $function_eval[$highest_point_index] = $reflected_function_eval;
             }
 
@@ -506,17 +483,15 @@ sub _optimize {
             if ($reflected_function_eval < $highest_value) {
 
                 #replace the simplex highest point with reflected point;
-                @{$simplex[$highest_point_index]} =
-                    map { $current_reflection[$_] } (0 .. $num_of_var - 1);
+                @{$simplex[$highest_point_index]} = @current_reflection;
                 $function_eval[$highest_point_index] = $reflected_function_eval;
             }
 
             @current_contraction =
-                map { $simplex_centroid[$_] + 0.5 * ($simplex[$highest_point_index][$_] - $simplex_centroid[$_]) } (0 .. $num_of_var - 1);
+                map { ($simplex_centroid[$_] + $simplex[$highest_point_index][$_]) / 2 } (0 .. $num_of_var - 1);
             $contraction_function_eval = $self->function_to_optimize(\@current_contraction);
             if ($contraction_function_eval < $function_eval[$highest_point_index]) {
-                @{$simplex[$highest_point_index]} =
-                    map { $current_contraction[$_] } (0 .. $num_of_var - 1);
+                @{$simplex[$highest_point_index]} = @current_contraction;
                 $function_eval[$highest_point_index] = $contraction_function_eval;
             } elsif ($reflected_function_eval >= $highest_value) {
                 $calcvert = 1;
@@ -533,8 +508,18 @@ sub _optimize {
         $counter++;
     }
 
-    my @sorted_eval = sort { $a <=> $b } @function_eval;
-    $lowest_point_index = first_index { $_ == $sorted_eval[0] } @function_eval;
+    my $min_counter        = 0;
+    my $lowest_point_value = $function_eval[0];
+    $lowest_point_index = 0;
+
+    for my $eval_item (@function_eval) {
+        if ($eval_item < $lowest_point_value) {
+            $lowest_point_index = $min_counter;
+            $lowest_point_value = $eval_item;
+        }
+
+        $min_counter++;
+    }
 
     my $new_params            = $simplex[$lowest_point_index];
     my $new_calibration_error = $function_eval[$lowest_point_index] * 1000;

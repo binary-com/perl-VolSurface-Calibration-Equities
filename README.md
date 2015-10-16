@@ -9,17 +9,17 @@ Basically a Volatility Surface Calibration algorithm tries to check a Vol-Surfac
 σ_impl= α x log⁡(F_0⁄K)/D(ζ) x  {1+[(2γ_2-γ_(1 )^2+1⁄(F_mid^2 ))/24 x   ((σ_0 C(F_mid ))/α)^2+ (ργ_1)/4 x  (σ_0 C((F_mid ))/α+ (2-3ρ^2)/24]  x ε }
 
 ```
-The above equation basically expresses implied volatility as some sort of moneyness function (the alpha x log(F/K)D(...) part). This term is adjusted by a factor in the square brackets and then added back. In our variant of the standard SABR approach, we modify the terms in the square brackets. This calibration approach is based upon modeling the term structure of ATM volatiity and Skew using exponential functions, as it is widely observed that ATM vols term structure or skew term structure is mostly convex. We have observed that this variant results in a more consistent option prices.
+The above equation basically expresses implied volatility as some sort of moneyness function (the alpha x log(F/K)D(...) part). This term is adjusted by a factor in the square brackets and then added back. In our variant of the standard SABR approach, we modify the terms in the square brackets. This calibration approach is based upon modeling the term structure of ATM volatility and Skew using exponential functions, as it is widely observed that ATM vols term structure or skew term structure is mostly convex. We have observed that this variant results in a more consistent option prices.
 
 For optimization, we use a form of the Downhill Simplex Method or Nelder-Mead (available as the R function optim). 
 
 ### Documentation
 
-Further details of the calibration model is available in MS Word and pdf formats at:
+Further details of the calibration model is available in MS Word and pdf formats inside 'documentation' directory as below:
 
-https://github.com/mm-binary/perl-VolSurface-Calibration-Equities/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.docx
+[MS Work Format](documentation/Binary's_equities_volatility_calibration.docx)
 
-https://github.com/mm-binary/perl-VolSurface-Calibration-Equities/blob/mm/initial_movement/documentation/Binary's_equities_volatility_calibration.pdf
+[PDF Format](documentation/Binary's_equities_volatility_calibration.pdf)
 
 ### Example
 
@@ -44,7 +44,7 @@ my $calibration_parameters = $calibrator->compute_parameterization;
 
 ```
 
-The result will contain *calibration error* and *calibration parameters*. The calibration error is stored in `$calibratio_parameters->{calibration_error}`. 
+The result will contain *calibration error* and *calibration parameters*. The calibration error is stored in `$calibration_parameters->{calibration_error}`. 
 The calibration parameters (atmvol1year, kurtosisshort, atmvolshort, kurtosislong, skewlong, skewwingL, skewshort, atmvolLong, atmWingL, atmWingR, skew1year and kurtosisgrowth)
 are stored in `$calibration_parameters->{values}` in a hashmap.
 As this algorithm is recursive, you can feed the result `$calibration_parameters` again into the calibrator to achieve a better calibration result.

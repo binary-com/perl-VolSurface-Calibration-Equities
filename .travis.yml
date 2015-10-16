@@ -13,6 +13,5 @@ before_install:
     - "cpanm List::Util"
     - "cpanm List::MoreUtils"
     - "cpanm Test::Perl::Critic" 
-    - "cpanm Devel::Cover::Report::Coveralls"
 script:
-  perl Makefile.PL && make test && cover -test -report coveralls
+  perl Makefile.PL && make test
