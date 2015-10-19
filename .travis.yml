@@ -1,0 +1,17 @@
+language: perl
+perl:
+    - "5.20"
+    - "5.18"
+    - "5.16"
+    - "5.14"
+before_install:
+    - "cpanm --installdeps ."
+    - "cpanm Date::Utility" 
+    - "cpanm Format::Util::Numbers"
+    - "cpanm Try::Tiny"
+    - "cpanm Math::Trig"
+    - "cpanm List::Util"
+    - "cpanm List::MoreUtils"
+    - "cpanm Test::Perl::Critic" 
+script:
+  perl Makefile.PL && make test
