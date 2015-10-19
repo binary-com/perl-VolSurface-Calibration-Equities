@@ -1,5 +1,4 @@
 .travis.yml
-Changes
 documentation/Binary's_equities_volatility_calibration.docx
 documentation/Binary's_equities_volatility_calibration.pdf
 ignore.txt
@@ -7,7 +6,6 @@ lib/VolSurface/Calibration/Equities.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
-README
 README.md
 t/00-load.t
 t/equities.t
@@ -17,5 +15,3 @@ t/pod-coverage.t
 t/pod.t
 t/rc/.perlcriticrc
 t/rc/.perltidyrc
-t/test
-temp
