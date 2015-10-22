@@ -17,7 +17,7 @@ For optimization, we use a form of the Downhill Simplex Method or Nelder-Mead (a
 
 Further details of the calibration model is available in MS Word and pdf formats inside 'documentation' directory as below:
 
-[MS Work Format](documentation/Binary's_equities_volatility_calibration.docx)
+[MS Word Format](documentation/Binary's_equities_volatility_calibration.docx)
 
 [PDF Format](documentation/Binary's_equities_volatility_calibration.pdf)
 
