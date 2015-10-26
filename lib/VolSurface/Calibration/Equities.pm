@@ -38,7 +38,7 @@ It is hard-coded here because it needs to be in this sequence.
 
 =cut
 
-my @calibration_param_names = qw/
+our @calibration_param_names = qw/
     atmvolshort
     atmvol1year
     atmvolLong
