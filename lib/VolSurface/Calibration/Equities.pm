@@ -3,7 +3,7 @@ package VolSurface::Calibration::Equities;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ SABR model, please refer https://en.wikipedia.org/wiki/SABR_volatility_model.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
@@ -38,7 +38,7 @@ It is hard-coded here because it needs to be in this sequence.
 
 =cut
 
-my @calibration_param_names = qw/
+our @calibration_param_names = qw/
     atmvolshort
     atmvol1year
     atmvolLong
