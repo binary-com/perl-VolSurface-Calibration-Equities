@@ -215,20 +215,20 @@ my $sabr = VolSurface::Calibration::Equities->new(
 #p14n is for parameterization
 my $p14n = $sabr->compute_parameterization;
 
-is($p14n->{calibration_error}, 5.30443153953118);
+is(sprintf("%.10f", $p14n->{calibration_error}), 5.3044315395);
 
-is($p14n->{values}->{skewwingR}, 1.88107143471881);
-is($p14n->{values}->{atmvol1year}, 0.219751912673385);
-is($p14n->{values}->{kurtosisshort}, 0.149061064029684);
-is($p14n->{values}->{atmvolshort}, 0.18766331944103);
-is($p14n->{values}->{kurtosislong}, 0.0519890233725906);
-is($p14n->{values}->{skewlong}, -0.233719000522154);
-is($p14n->{values}->{skewwingL}, 19.9889221540814);
-is($p14n->{values}->{skewshort}, -0.111623735564867);
-is($p14n->{values}->{atmvolLong}, 0.21678145623794);
-is($p14n->{values}->{atmWingL}, 1.57381209378229);
-is($p14n->{values}->{atmWingR}, 19.9995540633721);
-is($p14n->{values}->{skew1year}, -0.225674773248133);
-is($p14n->{values}->{kurtosisgrowth}, 4.98176449317822);
+is(sprintf("%.10f", $p14n->{values}->{skewwingR}), 1.8810714347);
+is(sprintf("%.10f", $p14n->{values}->{atmvol1year}), 0.2197519127);
+is(sprintf("%.9f", $p14n->{values}->{kurtosisshort}), 0.149061064);
+is(sprintf("%.10f", $p14n->{values}->{atmvolshort}), 0.1876633194);
+is(sprintf("%.10f", $p14n->{values}->{kurtosislong}), 0.0519890234);
+is(sprintf("%.10f", $p14n->{values}->{skewlong}), -0.2337190005);
+is(sprintf("%.10f", $p14n->{values}->{skewwingL}), 19.9889221541);
+is(sprintf("%.10f", $p14n->{values}->{skewshort}), -0.1116237356);
+is(sprintf("%.10f", $p14n->{values}->{atmvolLong}), 0.2167814562);
+is(sprintf("%.10f", $p14n->{values}->{atmWingL}), 1.5738120938);
+is(sprintf("%.10f", $p14n->{values}->{atmWingR}), 19.9995540634);
+is(sprintf("%.10f", $p14n->{values}->{skew1year}), -0.2256747732);
+is(sprintf("%.10f", $p14n->{values}->{kurtosisgrowth}), 4.9817644932);
 
 dies_ok { VolSurface::Calibration::Equities->new(); } "Checking for required parameters";

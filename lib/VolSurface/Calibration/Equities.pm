@@ -3,7 +3,7 @@ package VolSurface::Calibration::Equities;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ SABR model, please refer https://en.wikipedia.org/wiki/SABR_volatility_model.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
