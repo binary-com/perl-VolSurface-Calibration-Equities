@@ -11,13 +11,13 @@ before_install:
     - source ~/travis-perl-helpers/init
     - build-perl
     - perl -V
-    - "cpanm --installdeps ."
-    - "cpanm Date::Utility" 
-    - "cpanm Format::Util::Numbers"
-    - "cpanm Try::Tiny"
-    - "cpanm Math::Trig"
-    - "cpanm List::Util"
-    - "cpanm List::MoreUtils"
-    - "cpanm Test::Perl::Critic" 
+    - "cpanm -n --installdeps ."
+    - "cpanm -n Date::Utility" 
+    - "cpanm -n Format::Util::Numbers"
+    - "cpanm -n Try::Tiny"
+    - "cpanm -n Math::Trig"
+    - "cpanm -n List::Util"
+    - "cpanm -n List::MoreUtils"
+    - "cpanm -n Test::Perl::Critic" 
 script:
   perl Makefile.PL && make test
