@@ -24,4 +24,4 @@ before_install:
     - "cpanm -n Test::Requires::Git"
     - "cpanm -n Devel::Cover::Report::Codecov"
 script:
-  perl Makefile.PL && cover -test -report codecov
+  perl Makefile.PL && PERL5OPT=-MDevel::Cover make test && cover -report codecov
