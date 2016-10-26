@@ -21,5 +21,7 @@ before_install:
     - "cpanm -n List::Util"
     - "cpanm -n List::MoreUtils"
     - "cpanm -n Test::Perl::Critic" 
+    - "cpanm -n Test::Requires::Git"
+    - "cpanm -n Devel::Cover::Report::Codecov"
 script:
-  perl Makefile.PL && make test
+  perl Makefile.PL && make test && cover -report codecov
