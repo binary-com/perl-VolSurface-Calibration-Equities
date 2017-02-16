@@ -341,7 +341,7 @@ sub _get_params_from {
 
 =head2 _calculate_skew
 
-The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions. 
+The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions.
 
 =cut
 
@@ -368,9 +368,9 @@ sub _calculate_skew {
 
 =head2 _calculate_kurtosis
 
-kurtosis can be manipulated using a simple growth rate function. 
-Kurtosis provides a symmetric control over the wings of a 
-surface. Kurtosis basically shifts the wings of the curve in a symetric way. 
+kurtosis can be manipulated using a simple growth rate function.
+Kurtosis provides a symmetric control over the wings of a
+surface. Kurtosis basically shifts the wings of the curve in a symetric way.
 
 =cut
 
