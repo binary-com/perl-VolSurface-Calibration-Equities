@@ -155,7 +155,6 @@ sub function_to_optimize {
     foreach my $day (@{$self->term_by_day}) {
         my $sum       = 0;
         my $tenorvega = 0;
-        my $atm_vol   = shift @atmvols;
         foreach my $point (@{$self->smile_points}) {
             my $calibrated_vol = $calibrated_surface->{$day}->{$point};
             my $actual_vol     = $actual_surface->{$day}->{smile}->{$point};
