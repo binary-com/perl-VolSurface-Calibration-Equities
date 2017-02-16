@@ -12,8 +12,8 @@ VolSurface::Calibration::Equities
 =head1 DESCRIPTION
 
 This module implements Binary.com's volatility surface calibration algorithm which is based on SABR.
-The SABR (Stochastic alpha, beta, rho) model is a stochastic volatility model, which is used to 
-estimate the volatility smile in the derivatives market. For a more general overview of the general 
+The SABR (Stochastic alpha, beta, rho) model is a stochastic volatility model, which is used to
+estimate the volatility smile in the derivatives market. For a more general overview of the general
 SABR model, please refer https://en.wikipedia.org/wiki/SABR_volatility_model.
 
 =head1 VERSION
@@ -157,7 +157,6 @@ sub function_to_optimize {
         my $tenorvega = 0;
         my $atm_vol   = shift @atmvols;
         foreach my $point (@{$self->smile_points}) {
-            my $atm_check      = log($point / 100) / $atm_vol / sqrt($day / 365);
             my $calibrated_vol = $calibrated_surface->{$day}->{$point};
             my $actual_vol     = $actual_surface->{$day}->{smile}->{$point};
             my $d1             = (log(100 / $point) + (0.5 * $actual_vol**2) * ($day / 365)) / ($actual_vol * ($day / 365)**0.5);
@@ -410,9 +409,9 @@ sub _calculate_variance {
 
 Algorithm change - now based on centroid calculations
 A function that optimizes a set of parameters against a function.
-This optimization method is based on Amoeba optimization. We use a form of the 
-Downhill Simplex Method or Nelder-Mead (available as the R function optim). 
-This can also be coded in other languages. 
+This optimization method is based on Amoeba optimization. We use a form of the
+Downhill Simplex Method or Nelder-Mead (available as the R function optim).
+This can also be coded in other languages.
 
 =cut
 
@@ -424,9 +423,6 @@ sub _optimize {
     my $num_of_points = $num_of_var;
 
     my $highest_value;
-
-    my $lambda1 = ((($num_of_points + 1)**0.5) - 1 + $num_of_points) / ($num_of_points * (2**0.5)) * $self->_scale;
-    my $lambda2 = ((($num_of_points + 1)**0.5) - 1) / ($num_of_points * (2**0.5)) * $self->_scale;
 
     my $i;
     my $j;
@@ -452,7 +448,6 @@ sub _optimize {
     my @current_contraction;
 
     my $expansion_function_eval;
-    my $reflected_function_eval;
     my $contraction_function_eval;
     my $lowest_point_index = 0;
 
