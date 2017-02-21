@@ -3,7 +3,7 @@ package VolSurface::Calibration::Equities;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 =head1 NAME
 
@@ -12,13 +12,9 @@ VolSurface::Calibration::Equities
 =head1 DESCRIPTION
 
 This module implements Binary.com's volatility surface calibration algorithm which is based on SABR.
-The SABR (Stochastic alpha, beta, rho) model is a stochastic volatility model, which is used to 
-estimate the volatility smile in the derivatives market. For a more general overview of the general 
+The SABR (Stochastic alpha, beta, rho) model is a stochastic volatility model, which is used to
+estimate the volatility smile in the derivatives market. For a more general overview of the general
 SABR model, please refer https://en.wikipedia.org/wiki/SABR_volatility_model.
-
-=head1 VERSION
-
-Version 0.03
 
 =cut
 
@@ -147,7 +143,6 @@ sub function_to_optimize {
 
     return $error if (min(@variance) < 0);
 
-    my @atmvols            = map { sqrt($_) } @variance;
     my $calibrated_surface = $self->get_calibrated_surface(\%params);
     my $actual_surface     = $self->surface;
 
@@ -155,9 +150,7 @@ sub function_to_optimize {
     foreach my $day (@{$self->term_by_day}) {
         my $sum       = 0;
         my $tenorvega = 0;
-        my $atm_vol   = shift @atmvols;
         foreach my $point (@{$self->smile_points}) {
-            my $atm_check      = log($point / 100) / $atm_vol / sqrt($day / 365);
             my $calibrated_vol = $calibrated_surface->{$day}->{$point};
             my $actual_vol     = $actual_surface->{$day}->{smile}->{$point};
             my $d1             = (log(100 / $point) + (0.5 * $actual_vol**2) * ($day / 365)) / ($actual_vol * ($day / 365)**0.5);
@@ -342,7 +335,7 @@ sub _get_params_from {
 
 =head2 _calculate_skew
 
-The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions. 
+The calibration approach is based upon modeling the term structure of ATM Volatility and ATM Skew using exponential functions.
 
 =cut
 
@@ -369,9 +362,9 @@ sub _calculate_skew {
 
 =head2 _calculate_kurtosis
 
-kurtosis can be manipulated using a simple growth rate function. 
-Kurtosis provides a symmetric control over the wings of a 
-surface. Kurtosis basically shifts the wings of the curve in a symetric way. 
+kurtosis can be manipulated using a simple growth rate function.
+Kurtosis provides a symmetric control over the wings of a
+surface. Kurtosis basically shifts the wings of the curve in a symetric way.
 
 =cut
 
@@ -410,9 +403,9 @@ sub _calculate_variance {
 
 Algorithm change - now based on centroid calculations
 A function that optimizes a set of parameters against a function.
-This optimization method is based on Amoeba optimization. We use a form of the 
-Downhill Simplex Method or Nelder-Mead (available as the R function optim). 
-This can also be coded in other languages. 
+This optimization method is based on Amoeba optimization. We use a form of the
+Downhill Simplex Method or Nelder-Mead (available as the R function optim).
+This can also be coded in other languages.
 
 =cut
 
@@ -424,9 +417,6 @@ sub _optimize {
     my $num_of_points = $num_of_var;
 
     my $highest_value;
-
-    my $lambda1 = ((($num_of_points + 1)**0.5) - 1 + $num_of_points) / ($num_of_points * (2**0.5)) * $self->_scale;
-    my $lambda2 = ((($num_of_points + 1)**0.5) - 1) / ($num_of_points * (2**0.5)) * $self->_scale;
 
     my $i;
     my $j;
@@ -452,7 +442,6 @@ sub _optimize {
     my @current_contraction;
 
     my $expansion_function_eval;
-    my $reflected_function_eval;
     my $contraction_function_eval;
     my $lowest_point_index = 0;
 
@@ -611,38 +600,5 @@ L<http://cpanratings.perl.org/d/VolSurface-Calibration-Equities>
 L<http://search.cpan.org/dist/VolSurface-Calibration-SAB/>
 
 =back
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2015 Binary.com.
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-L<http://www.perlfoundation.org/artistic_license_2_0>
-Any use, modification, and distribution of the Standard or Modified
-Versions is governed by this Artistic License. By using, modifying or
-distributing the Package, you accept this license. Do not use, modify,
-or distribute the Package, if you do not accept this license.
-If your Modified Version has been derived from a Modified Version made
-by someone other than you, you are nevertheless required to ensure that
-your Modified Version complies with the requirements of this license.
-This license does not grant you the right to use any trademark, service
-mark, tradename, or logo of the Copyright Holder.
-This license includes the non-exclusive, worldwide, free-of-charge
-patent license to make, have made, use, offer to sell, sell, import and
-otherwise transfer the Package with respect to any patent claims
-licensable by the Copyright Holder that are necessarily infringed by the
-Package. If you institute patent litigation (including a cross-claim or
-counterclaim) against any party alleging that the Package constitutes
-direct or contributory patent infringement, then this Artistic License
-to you shall terminate on the date that such litigation is filed.
-Disclaimer of Warranty: THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER
-AND CONTRIBUTORS "AS IS' AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES.
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY
-YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
-CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
-CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
-EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
